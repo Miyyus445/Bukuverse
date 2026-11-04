@@ -1,0 +1,7 @@
+Summary,Issue Type,Description,Priority,Labels,Sprint
+"Scaffold Turborepo + Bun Monorepo","Task","Inisialisasi struktur monorepo menggunakan Turborepo dan Bun. Buat folder apps/web, apps/api, dan packages/. Setup package.json root, turbo.json, .gitignore, dan dokumentasi plan.","High","[setup, monorepo]","Sprint 2"
+"Setup Next.js (Frontend)","Task","Inisialisasi Next.js (App Router) + Tailwind CSS di apps/web menggunakan Bun. Setup Tsconfig, ESLint, dan Prettier. Pastikan dev server bisa jalan.","High","[setup, frontend]","Sprint 2"
+"Setup NestJS (Backend)","Task","Inisialisasi NestJS di apps/api menggunakan Bun. Setup basic module, controller, service untuk health check. Pastikan bisa run secara lokal.","High","[setup, backend]","Sprint 2"
+"Setup Database Neon & Prisma","Task","Buat project di Neon (Free Tier) dan ambil connection string (DATABASE_URL & DIRECT_URL). Inisialisasi Prisma ORM di apps/api. Setup schema awal (ApiCache, CuratedAuthor) dan jalankan migrasi ke Neon (branch dev).","High","[setup, backend, database]","Sprint 2"
+"Konfigurasi Shared Packages","Task","Setup packages/shared (untuk tipe data bersama antara frontend & backend). Hubungkan ke apps/web dan apps/api.","Medium","[setup, monorepo]","Sprint 2"
+"Integrasi Dasar Frontend-Backend","Task","Buat endpoint /api/health di NestJS. Buat halaman di Next.js yang memanggil endpoint tersebut untuk memastikan koneksi antar-app berjalan lancar.","Medium","[setup, integration]","Sprint 2"
