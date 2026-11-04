@@ -1,0 +1,23 @@
+{
+  "name": "bukuverse",
+  "private": true,
+  "packageManager": "bun@1.4.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "turbo": "latest",
+    "prettier": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  }
+}
