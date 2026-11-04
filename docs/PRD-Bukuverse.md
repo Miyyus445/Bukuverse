@@ -1,95 +1,120 @@
-# Product Requirements Document (PRD): Bukuverse
-**Version:** 1.0 (Draft)
-**Date:** 03 November 2026
-**Author:** DeepSeek (Pusat Project)
-**Status:** Ready for Review
+# PRD: Bukuverse
 
-## 1. Overview & Objective
-**Bukuverse** adalah platform web katalog buku berbasis web yang dirancang untuk memudahkan pelajar, mahasiswa, dan masyarakat umum dalam mencari referensi literatur. 
+**Versi:** 2.0 (versi Claude)
+**Tanggal:** 04 November 2026
+**Status:** Siap direview
+**Dokumen terkait:** `BLUEPRINT.md` (teknis), `AI_AGENT.md` (aturan AI agent)
 
-**Tujuan Utama:**
-1. Menyediakan antarmuka pencarian buku yang cepat, bersih, dan responsif.
-2. Mengakomodasi kebutuhan literatur global, dengan penekanan khusus pada kurasi buku karya penulis Indonesia ternama.
-3. Menjadi fondasi awal (MVP) untuk sistem perpustakaan digital di masa depan.
+## 1. Ringkasan
+Bukuverse adalah web katalog buku. User bisa mencari buku, memfilter berdasarkan bahasa, melihat detail, lalu lanjut baca/beli lewat Google Books. Ada section khusus untuk karya penulis Indonesia.
 
-## 2. Target User (User Persona)
-1. **Pelajar/Mahasiswa:** Butuh cari buku referensi cepat, filter berdasarkan bahasa atau penulis tertentu.
-2. **Masyarakat Umum:** Butuh eksplorasi buku bacaan populer, melihat sinopsis, dan link ke penyedia buku.
-3. *(Fase Selanjutnya)* **Pustakawan/Admin:** Mengelola ketersediaan buku pinjaman.
+## 2. Masalah yang Diselesaikan
+- Cari buku di Google Books langsung terasa ramai dan susah menemukan karya Indonesia.
+- Pelajar dan mahasiswa butuh pencarian referensi yang cepat dan bersih, terutama dari HP.
 
-## 3. Scope of Work (MVP)
-**In-Scope (Fase 20 Hari):**
-- Web app responsif (Mobile-first).
-- Integrasi data dari Google Books API.
-- Fitur Pencarian (berdasarkan judul, penulis, ISBN).
-- Filter (Bahasa, Kategori/Subject).
-- Halaman Detail Buku (Cover, Sinopsis, Penerbit, Link ke Google Books).
-- Kurasi "Buku Indonesia Ternama" (hardcoded query atau filter di backend).
+## 3. Tujuan dan Metrik Sukses
+| Tujuan | Metrik (MVP) |
+|---|---|
+| Pencarian cepat | Hasil muncul < 3 detik (saat cache hit < 1 detik) |
+| Mudah dipakai di HP | Semua halaman nyaman dipakai di layar 360px tanpa scroll horizontal |
+| Karya Indonesia mudah ditemukan | Section kurasi tampil di homepage dengan minimal 12 buku |
+| Stabil | Tidak ada halaman blank/crash saat API gagal (selalu ada pesan error) |
 
-**Out-of-Scope (Masuk Fase Bugfix/Update):**
-- Autentikasi (Login/Register).
-- Fitur Pinjam Buku / Keranjang.
-- Dashboard Admin.
-- Sistem denda atau pengembalian.
-- Database lokal untuk menyimpan data user (Database saat ini difokuskan untuk *caching* atau *system state* jika diperlukan, bukan data buku utama).
+**Bukan tujuan MVP:** login, pinjam buku, dashboard admin, rekomendasi personal.
 
-## 4. Functional Requirements (FR)
+## 4. Target User
+1. **Pelajar/Mahasiswa**: cari referensi cepat, filter bahasa.
+2. **Pembaca umum**: jelajah buku populer, baca sinopsis.
 
-### FR-1: Pencarian & Filter Katalog
-- Sistem dapat menerima input *keyword* pencarian (judul/penulis).
-- Sistem dapat menampilkan hasil dari Google Books API.
-- **Filter Bahasa:** User bisa memfilter hasil (misal: hanya Bahasa Indonesia, atau English).
-- **Filter Kategori/Subject:** (Opsional di MVP, bisa masuk fase bugfix) Filter berdasarkan kategori tertentu.
+## 5. User Story dan Kriteria Penerimaan
 
-### FR-2: Highlight Katalog (Buku Indonesia Ternama)
-- Halaman utama (Landing) harus menampilkan section khusus "Karya Indonesia Ternama".
-- Data diambil dari Google Books API dengan query spesifik (misal: `inauthor:"Pramoedya Ananta Toer"` atau *subject* terkait).
+### Prioritas: Must Have (MVP)
+**US-1 Cari buku**
+Sebagai user, saya ingin mencari buku lewat judul, penulis, atau ISBN.
+- Search bar ada di homepage dan halaman hasil.
+- Input kosong tidak memicu request.
+- Hasil tampil dalam grid dengan cover, judul, penulis.
+- Ada pagination (12 buku per halaman).
+- Tidak ada hasil: tampil pesan "Buku tidak ditemukan".
 
-### FR-3: Halaman Detail Buku
-- Menampilkan informasi: Thumbnail Cover (HD jika tersedia), Judul, Penulis, Penerbit, Tahun Terbit, Deskripsi/Sinopsis.
-- Tombol/Link "Baca di Google Books" yang mengarah ke `previewLink` dari API.
+**US-2 Filter bahasa**
+Sebagai user, saya ingin memfilter hasil berdasarkan bahasa.
+- Pilihan: Semua, Indonesia, English.
+- Ganti filter langsung memperbarui hasil dan URL (`?lang=id`), jadi bisa di-share.
+- Pindah filter mengembalikan ke halaman 1.
 
-### FR-4: Responsivitas
-- Tampilan harus *mobile-first* (sesuai pembagian tim Claude x Gemini).
-- Grid katalog menyesuaikan ukuran layar (1 kolom di HP, 3-4 kolom di Desktop).
+**US-3 Detail buku**
+Sebagai user, saya ingin melihat info lengkap sebuah buku.
+- Tampil: cover, judul, penulis, penerbit, tahun terbit, sinopsis.
+- Data kosong ditampilkan sebagai "Tidak tersedia", bukan dikosongkan.
+- Tombol "Baca di Google Books" membuka link di tab baru. Kalau link tidak ada, tombol disembunyikan.
 
-## 5. Non-Functional Requirements (NFR)
-- **Performance:** Waktu muat halaman < 3 detik. Mengingat API Google Books bisa lambat, wajib menggunakan teknik *caching* (misal di level Next.js `fetch` atau Redis di NestJS).
-- **Scalability:** Menggunakan arsitektur monorepo (Turborepo) agar mudah ditambahkan service baru di masa depan.
-- **Security:** API Google Books dipanggil dari backend (NestJS) agar API Key (jika nanti digunakan) tidak terekspos ke frontend.
-- **UI/UX:** Desain bersih, *minimalist*, fokus pada *cover* buku (seperti Goodreads/Google Books).
+**US-4 Karya Indonesia Ternama**
+Sebagai user, saya ingin melihat rekomendasi karya penulis Indonesia di homepage.
+- Section tampil di homepage tanpa user harus mencari.
+- Daftar penulis diatur dari database (`CuratedAuthor`), bukan hardcode di kode.
+- Klik buku membuka halaman detail.
 
-## 6. Technical Architecture
-- **Monorepo:** Turborepo + Bun.
-- **Frontend:** Next.js (App Router) + Tailwind CSS (atau Stitch design system).
-- **Backend:** NestJS (sebagai *API Gateway* & *Proxy* ke Google Books).
-- **Database:** PostgreSQL (Lokal) + Prisma ORM (Fungsi utama di MVP: Logging, cache tabel sederhana, atau menyimpan *curated list*).
+**US-5 Responsif**
+Sebagai user HP, saya ingin tampilan yang nyaman.
+- Grid: 1 kolom (HP), 2 (tablet), 3-4 (desktop).
+- Tombol dan input mudah disentuh (minimal 44px).
 
-## 7. User Flow (Alur Utama)
-**Alur Pencarian Buku:**
-User buka web → Masuk ke Homepage (lihat section "Buku Indonesia") → Ketik keyword di search bar → (Frontend hit API NestJS) → (NestJS hit Google Books API + caching) → Hasil muncul (Grid layout) → Klik salah satu buku → Masuk Halaman Detail → Klik "Baca di Google Books".
+**US-6 Kondisi khusus**
+- Loading: tampil skeleton/spinner.
+- Error API: tampil pesan ramah + tombol coba lagi.
+- Cover kosong atau rusak: tampil placeholder.
 
-**Alur Filter:**
-User di halaman pencarian → Buka dropdown "Bahasa" → Pilih "Indonesia" → Daftar buku terupdate otomatis.
+### Prioritas: Should Have (Fase 2)
+- Filter kategori/subject
+- Sorting hasil (relevansi, terbaru)
 
-## 8. Timeline (30 Hari Total)
+### Prioritas: Could Have (kalau sempat)
+- Auth sederhana + "Simulasi Pinjam"
+- Dark mode
 
-**Fase 1: Development MVP (Hari 1 - 20)**
-- **Hari 1-3:** Setup Monorepo (Turborepo+Bun), Setup Next.js, Setup NestJS, Setup Prisma+PostgreSQL Lokal.
-- **Hari 4-7:** Integrasi Backend NestJS ke Google Books API (Endpoint Search, Detail, Curated List). Buat unit testing sederhana.
-- **Hari 8-14:** Pembuatan Frontend Next.js (Halaman Home, Search Result, Detail). Integrasi API Backend.
-- **Hari 15-18:** Responsive Design & Styling Polish (Claude x Gemini ambil alih di sini).
-- **Hari 19-20:** End-to-End Testing MVP. Deploy ke lokal/staging.
+### Prioritas: Won't Have (sekarang)
+- Pinjam sungguhan, denda, dashboard admin
 
-**Fase 2: Bugfix & Minor Feature (Hari 21 - 30)**
-- **Hari 21-25:** Bug fixing dari hasil testing MVP.
-- **Hari 26-28:** Implementasi Auth & Fitur "Simulasi Pinjam" (Jika sempat).
-- **Hari 29-30:** Final Polish & Dokumentasi.
+## 6. Daftar Kurasi Awal
+Pramoedya Ananta Toer, Tere Liye, Andrea Hirata, Eka Kurniawan, Dee Lestari, Leila S. Chudori.
+Daftar ini bisa diubah tanpa deploy ulang karena disimpan di database.
 
-## 9. Risiko & Mitigasi
-1. **Google Books API Rate Limit / Limitasi Tanpa Key:**
-   - *Mitigasi:* Terapkan *caching* di NestJS (simpan response ke DB/Redis). Gunakan key jika nanti dibutuhkan.
-2. **Timeline Mepet (20 Hari):**
-   - *Mitigasi:* Fokus ke *core feature* (Search, Detail, Responsive). Fitur Auth/Pinjam di-skip dulu, masuk fase Bugfix.
-3. **Kualitas Data Google Books (Sampul pecah / Data ga lengkap):**
-   - *Mitigasi:* Handling UI jika gambar tidak ada (pakai placeholder). Filter data minimal yang layak tampil.
+## 7. Alur Utama
+1. User buka homepage, lihat Karya Indonesia Ternama.
+2. Ketik keyword lalu masuk ke halaman hasil.
+3. (Opsional) pilih filter bahasa.
+4. Klik buku lalu masuk halaman detail.
+5. Klik "Baca di Google Books".
+
+## 8. Kebutuhan Non-Fungsional
+- **Performa:** target < 3 detik. Response Google Books di-cache di database (masa berlaku 24 jam untuk search, 7 hari untuk detail).
+- **Keamanan:** Google Books hanya dipanggil dari backend. API key (kalau dipakai) hanya di `.env` backend.
+- **Aksesibilitas dasar:** gambar punya teks alternatif, kontras warna cukup.
+- **Bahasa UI:** Indonesia.
+
+## 9. Batasan dan Asumsi
+- Data buku sepenuhnya dari Google Books API. Kualitas data mengikuti sumber (cover/sinopsis bisa kosong).
+- Google Books maksimal 40 hasil per request.
+- Tanpa API key, kuota harian terbatas. Cache wajib untuk menghindari limit.
+- Pengerjaan oleh satu orang pemula dibantu AI, jadi scope sengaja dibuat kecil.
+
+## 10. Risiko
+| Risiko | Dampak | Mitigasi |
+|---|---|---|
+| Kena rate limit Google Books | Hasil gagal tampil | Cache di DB, pakai API key bila perlu |
+| Data buku jelek | Tampilan berantakan | Placeholder, fallback teks, filter data minimal |
+| Timeline mepet | MVP telat | Pegang prioritas Must Have, tunda sisanya |
+| Kuota AI gratis habis | Progres lambat | Task kecil per sesi, simpan progres di `BLUEPRINT.md` |
+
+## 11. Timeline
+Mengikuti `BLUEPRINT.md` bagian 9:
+- **Hari 1-20:** MVP (semua Must Have)
+- **Hari 21-30:** Bugfix, lalu Should/Could Have
+
+## 12. Definisi Selesai (MVP)
+- Semua user story Must Have lolos kriteria penerimaan
+- Berjalan lancar di HP dan desktop
+- Tidak ada error di console pada alur utama
+- `BLUEPRINT.md` dan README sudah diperbarui
+- Bisa dijalankan dari nol dengan `bun install` + `docker compose up -d` + `bun dev`
