@@ -1,0 +1,5 @@
+Summary,Issue Type,Description,Priority,Labels,Sprint
+"Buat file BLUEPRINT.md","Task","Simpan file BLUEPRINT.md dari Claude ke root folder. Pastikan isinya sudah sesuai (Tech Stack, Alur Data, Timeline, dll).","High","[docs, setup]","Sprint 1"
+"Buat file AI_AGENT.md","Task","Simpan file AI_AGENT.md dari Claude ke root folder. Pastikan aturan main untuk OpenCode (satu task per sesi, dilarang over-engineering, dll) sudah sesuai.","High","[docs, setup]","Sprint 1"
+"Buat file Architecture.md (Mentor)","Task","Minta Claude untuk generate dokumen Architecture.md (bentuk formal untuk mentor). Pastikan isinya sinkron dengan BLUEPRINT.md. Simpan di root folder atau docs/.","High","[docs]","Sprint 1"
+"Commit & Push Dokumen Awal","Task","Setelah ketiga file (BLUEPRINT.md, AI_AGENT.md, Architecture.md) masuk ke root project, lakukan git add, commit, dan push ke branch docs/prd-bukuverse.","High","[docs, git]","Sprint 1"
