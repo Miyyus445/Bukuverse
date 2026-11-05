@@ -133,7 +133,8 @@ Grid: 1 kolom (HP), 2 (tablet), 3-4 (desktop). Cover kosong/rusak pakai placehol
 - [x] BLUEPRINT.md
 - [x] AI_AGENT.md
 - [x] Setup monorepo
-- [ ] Backend
+- [x] Setup NestJS (Task 3)
+- [ ] Backend (search, detail, curated, cache)
 - [ ] Frontend
 - [ ] Responsif
 - [ ] Testing
