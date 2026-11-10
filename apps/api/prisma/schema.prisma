@@ -19,6 +19,6 @@ model ApiCache {
 
 model CuratedAuthor {
   id    String @id @default(uuid())
-  name  String
+  name  String @unique
   order Int
 }

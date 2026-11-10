@@ -135,7 +135,7 @@ Grid: 1 kolom (HP), 2 (tablet), 3-4 (desktop). Cover kosong/rusak pakai placehol
 - [x] Setup monorepo
 - [x] Setup NestJS (Task 3)
 - [x] Setup Database Neon & Prisma (Task 4)
-- [ ] Backend (search, detail, curated, cache)
+- [x] Backend (search, detail, curated, cache)
 - [ ] Frontend
 - [ ] Responsif
 - [ ] Testing
