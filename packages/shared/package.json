@@ -1,0 +1,22 @@
+{
+  "name": "@bukuverse/shared",
+  "version": "0.0.1",
+  "description": "Shared types between frontend and backend",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.2"
+  }
+}
