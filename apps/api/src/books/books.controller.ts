@@ -93,10 +93,13 @@ export class BooksController {
       allBooks.push(...books);
     }
 
-    // Simpan ke cache (TTL 24 jam)
-    await this.cache.set(cacheKey, allBooks, 86400);
+    // Hapus duplikat berdasarkan ID buku (beberapa penulis bisa punya buku yg sama)
+    const uniqueBooks = Array.from(new Map(allBooks.map(b => [b.id, b])).values());
 
-    return allBooks;
+    // Simpan ke cache (TTL 24 jam)
+    await this.cache.set(cacheKey, uniqueBooks, 86400);
+
+    return uniqueBooks;
   }
 
   /**
