@@ -40,6 +40,9 @@ bukuverse/
 │   └── api/          # NestJS
 ├── packages/
 │   └── shared/       # tipe TypeScript bersama
+├── docs/
+│   ├── DESIGN_SPEC.md # Spesifikasi UI/UX (Sumber kebenaran desain)
+│   └── PRD_FINAL.md   # Dokumen PRD versi final
 ├── .env.example
 ├── turbo.json
 ├── BLUEPRINT.md
@@ -102,6 +105,12 @@ Grid: 1 kolom (HP), 2 (tablet), 3-4 (desktop). Cover kosong/rusak pakai placehol
 - Hari 26-28: Filter kategori, lalu auth + "simulasi pinjam" kalau sempat
 - Hari 29-30: Polish final + dokumentasi
 
+**Sprint 3: UI/UX & Polish (Fase Lanjutan)**
+- Menerapkan `DESIGN_SPEC.md` (Modern Editorial Theme, Tailwind v4).
+- Penyesuaian filter bahasa (hanya Semua, id, en).
+- Implementasi komponen: Header, Footer, BookCard baru, Skeleton, Error/Empty States.
+- Refactor halaman Home, Search, dan Detail sesuai desain baru.
+
 ## 10. Risiko
 
 | Risiko                                                          | Mitigasi                                                                                |
@@ -129,7 +138,7 @@ Grid: 1 kolom (HP), 2 (tablet), 3-4 (desktop). Cover kosong/rusak pakai placehol
 
 ## 12. Status
 
-- [x] PRD v5.0 (Approved, file `PRD_FINAL.md`)
+- [x] PRD v5.0 (Approved, file `docs/PRD_FINAL.md`)
 - [x] BLUEPRINT.md
 - [x] AI_AGENT.md
 - [x] Setup monorepo
@@ -137,6 +146,7 @@ Grid: 1 kolom (HP), 2 (tablet), 3-4 (desktop). Cover kosong/rusak pakai placehol
 - [x] Setup Database Neon & Prisma (Task 4)
 - [x] Backend (search, detail, curated, cache)
 - [x] Frontend (Home, Search, Detail)
-- [ ] Responsif
-- [ ] Testing
+- [ ] Sprint 3: UI/UX (Design Tokens, Layout, Komponen Dasar)
+- [ ] Sprint 3: Refactor Halaman (Home, Search, Detail)
+- [ ] Sprint 3: QA Responsif & Aksesibilitas
 - [ ] Deploy Vercel + Neon production
